@@ -14,10 +14,9 @@ public class CameraFollow : MonoBehaviour {
 	public Vector2 maxXAndY;		// The maximum x and y coordinates the camera can have.
 	public Vector2 minXAndY;		// The minimum x and y coordinates the camera can have.
 
-
+    [HideInInspector]
 	public Transform player;		// Reference to the player's transform.
-
-
+    
 	void Awake ()
 	{
 		// Setting up the reference. Changed to public from original private
@@ -41,7 +40,11 @@ public class CameraFollow : MonoBehaviour {
 
 	void FixedUpdate ()
 	{
-		TrackPlayer();
+        // Only update the position of the camera if there is a player to follow
+        if (player != null)
+        {
+		    TrackPlayer();
+        }
 	}
 
 
