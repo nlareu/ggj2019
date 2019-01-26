@@ -179,11 +179,13 @@ public class AvatarController : MonoBehaviour
             //Debug.Log("Let's glide");
             this.rigidBody.gravityScale = this.glideGravity;
             this.isGliding = true;
+            this.animator.SetBool("Planing", true);
         }
         if (this.IsJumping == false || Input.GetKeyUp(KeyCode.RightShift))
         {
             this.rigidBody.gravityScale = this.initialGravity;
             this.isGliding = false;
+            this.animator.SetBool("Planing", false);
         }
 
         this.transform.Translate(moveVector);
