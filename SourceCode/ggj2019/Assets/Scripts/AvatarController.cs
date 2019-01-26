@@ -14,6 +14,12 @@ public class AvatarController : MonoBehaviour
     public float JumpHeight = 250.0f;
     public int PlayerNumber;
     public float Speed = 6.0F;
+
+    [Header("Glide variables")]
+    public float glideGravity;
+    private float initialGravity;
+    private bool isGliding = false;
+
     protected AvatarStates state = AvatarStates.Normal;
     public AvatarStates State
     {
@@ -84,6 +90,20 @@ public class AvatarController : MonoBehaviour
         this.rigidBody = GetComponent<Rigidbody2D>();
         this.spriteRendered = GetComponent<SpriteRenderer>();
         this.tag = Tags.PLAYER;
+
+        this.initialGravity = this.rigidBody.gravityScale;
+    }
+
+    protected virtual void Start()
+    {
+        // Getting the reference to the camera
+        CameraFollow myCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraFollow>();
+
+        if (myCamera != null)
+        {
+            //Debug.Log("We have a Camera");
+            myCamera.player = gameObject.transform;
+        }
     }
 
     protected virtual void Update()
@@ -145,6 +165,25 @@ public class AvatarController : MonoBehaviour
             this.rigidBody.velocity = new Vector2(this.rigidBody.velocity.x, Vector2.up.y * this.JumpHeight);
 
             this.IsJumping = true;
+            //IsJumpi
+        }
+
+        // Glide function
+        if (Input.GetKey(KeyCode.RightShift) && this.IsJumping == true)
+        {
+            if(!this.isGliding)
+            {
+                this.rigidBody.velocity = new Vector2(this.rigidBody.velocity.x, 0f);
+            }
+            
+            //Debug.Log("Let's glide");
+            this.rigidBody.gravityScale = this.glideGravity;
+            this.isGliding = true;
+        }
+        if (this.IsJumping == false || Input.GetKeyUp(KeyCode.RightShift))
+        {
+            this.rigidBody.gravityScale = this.initialGravity;
+            this.isGliding = false;
         }
 
         this.transform.Translate(moveVector);
