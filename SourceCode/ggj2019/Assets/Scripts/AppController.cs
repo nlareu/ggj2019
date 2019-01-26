@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class AppController : MonoBehaviour {
 
@@ -12,6 +13,14 @@ public class AppController : MonoBehaviour {
     private List<AvatarController> players = new List<AvatarController>();
     private List<AvatarController> playersDead = new List<AvatarController>();
 
+    [Header("Time variables")]
+    public Text timerText;
+    public GameObject completionMenu;
+    [HideInInspector]
+    public float elapsedTime = 0f;
+    private bool updatingTimer = true;
+
+    private bool levelFinished = false;
 
     // Use this for initialization
     void Start () {
@@ -34,8 +43,35 @@ public class AppController : MonoBehaviour {
 
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+
+        // Updating timer UI.
+        if (updatingTimer)
+        {
+            elapsedTime = Mathf.Max(0, elapsedTime + Time.deltaTime);
+            var timeSpan = System.TimeSpan.FromSeconds(elapsedTime);
+            timerText.text = timeSpan.Hours.ToString("00") + ":" +
+                timeSpan.Minutes.ToString("00") + ":" +
+                timeSpan.Seconds.ToString("00") + "." +
+                timeSpan.Milliseconds / 100;
+        }
+
+        if (this.levelFinished && Input.anyKeyDown)
+        {
+            //Debug.Log("Restart the level");
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
+    /// <summary>
+    /// Indicates that the level has ended and ends it.
+    /// </summary>
+    public void LevelEnded()
+    {
+        //Debug.Log("The level has ended");
+        this.updatingTimer = false;
+        this.levelFinished = true;
+        this.completionMenu.SetActive(true);
+    }
 
     public int AddPlayer(AvatarController avatar)
     {
