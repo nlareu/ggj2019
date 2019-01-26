@@ -394,7 +394,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'PLEASE!!! Help the little kiwi get back to its nest.
+  m_Text: 'PLEASE!!! Help the little pidgeon get back to its nest.
 
 
     a: move left
@@ -403,7 +403,7 @@ MonoBehaviour:
 
     space: jump
 
-    right shift: plane'
+    right shift: glide'
 --- !u!222 &407996434
 CanvasRenderer:
   m_ObjectHideFlags: 0
