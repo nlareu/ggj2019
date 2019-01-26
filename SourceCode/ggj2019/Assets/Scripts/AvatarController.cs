@@ -14,11 +14,18 @@ public class AvatarController : MonoBehaviour
     public float JumpHeight = 250.0f;
     public int PlayerNumber;
     public float Speed = 6.0F;
+    //public GameObject groundCheck;
 
     [Header("Glide variables")]
     public float glideGravity;
     private float initialGravity;
     private bool isGliding = false;
+
+    [Header("Sound Effects")]
+    public AudioSource playerSoundSource;
+    public AudioClip jumpSound;
+    public AudioClip fallSound;
+    public AudioClip glideSound;
 
     protected AvatarStates state = AvatarStates.Normal;
     public AvatarStates State
@@ -120,7 +127,6 @@ public class AvatarController : MonoBehaviour
             #endregion
         }
 
-
         this.previousDirection = this.currentDirection;
         this.previousPosition = new Vector2(this.rigidBody.position.x, this.rigidBody.position.y);
         this.previousState = this.State;
@@ -165,7 +171,9 @@ public class AvatarController : MonoBehaviour
             this.rigidBody.velocity = new Vector2(this.rigidBody.velocity.x, Vector2.up.y * this.JumpHeight);
 
             this.IsJumping = true;
-            //IsJumpi
+
+            playerSoundSource.clip = jumpSound;
+            this.playerSoundSource.Play();
         }
 
         // Glide function
@@ -179,13 +187,23 @@ public class AvatarController : MonoBehaviour
             //Debug.Log("Let's glide");
             this.rigidBody.gravityScale = this.glideGravity;
             this.isGliding = true;
+
             this.animator.SetBool("Planing", true);
+
+            // Sound effect
+            if (Input.GetKeyDown(KeyCode.RightShift))
+            {
+                this.playerSoundSource.clip = glideSound;
+                this.playerSoundSource.Play();
+            }
         }
         if (this.IsJumping == false || Input.GetKeyUp(KeyCode.RightShift))
         {
             this.rigidBody.gravityScale = this.initialGravity;
             this.isGliding = false;
+
             this.animator.SetBool("Planing", false);
+            playerSoundSource.Stop();
         }
 
         this.transform.Translate(moveVector);
