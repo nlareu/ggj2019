@@ -16,6 +16,7 @@ public class AppController : MonoBehaviour {
     [Header("Time variables")]
     public Text timerText;
     public GameObject completionMenu;
+    public Text completionTimeText;
     [HideInInspector]
     public float elapsedTime = 0f;
     private bool updatingTimer = true;
@@ -70,6 +71,8 @@ public class AppController : MonoBehaviour {
         //Debug.Log("The level has ended");
         this.updatingTimer = false;
         this.levelFinished = true;
+
+        this.completionTimeText.text = "Your time is: " + this.timerText.text;
         this.completionMenu.SetActive(true);
     }
 
