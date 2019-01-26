@@ -4,23 +4,20 @@ using UnityEngine;
 public class FixedWayPointsMove : MonoBehaviour
 {
     public float Speed = 0.25f;
-    public List<GameObject> ListOfWaypoints;
+    public List<Transform> ListOfWaypoints;
     public int StartIndex = 0;
 
     private Vector2 currentWaypont;
     private int currentWaypointIndex;
     private Vector2 nextWaypoint;
     private float timer = 5.0f;
-    public List<Vector2> waypoints;
+    private List<Vector2> waypoints = new List<Vector2>();
 
     void Start()
     {
         //If waypoints are not defined, build it automatically
         //depending the initial position of the object.
-        if (this.ListOfWaypoints.Count == 0)
-            this.BuildWaypoints_HorizontalSimple();
-        else
-            this.ListOfWaypoints.ForEach(item => this.waypoints.Add(item.transform.position));
+        this.ListOfWaypoints.ForEach(item => this.waypoints.Add(item.transform.position));
 
 
         this.currentWaypointIndex = this.StartIndex;
