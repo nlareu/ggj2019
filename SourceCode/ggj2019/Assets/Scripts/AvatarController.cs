@@ -218,7 +218,23 @@ public class AvatarController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D col)
     {
         CollisionsManager.ResolveCollision(this.gameObject, col.gameObject, col);
+
+        // For moving the player with the platform
+        if (col.gameObject.CompareTag("Ground"))
+        {
+            transform.SetParent(col.gameObject.transform);
+        }
     }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        // To stop moving the player with the platform
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            transform.SetParent(null);
+        }
+    }
+
     private void OnDied()
     {
         if (this.Died != null)
